@@ -1,39 +1,40 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings
-
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(ConvertisseurApp());
+  runApp(TodoApp());
 }
 
-class ConvertisseurApp extends StatelessWidget {
+class TodoApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ConvertisseurHome(),
+      home: TodoList(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class ConvertisseurHome extends StatefulWidget {
+class TodoList extends StatefulWidget {
   @override
-  _ConvertisseurHomeState createState() => _ConvertisseurHomeState();
+  _TodoListState createState() => _TodoListState();
 }
 
-class _ConvertisseurHomeState extends State<ConvertisseurHome> {
-  String _selectedConversion = "EuroToDinar";
-  TextEditingController _controller = TextEditingController();
-  double _resultat = 0.0;
+class _TodoListState extends State<TodoList> {
+  final List<String> _todos = [];
+  final TextEditingController _controller = TextEditingController();
 
-  void _convertir() {
+  void _addTodo() {
+    if (_controller.text.isNotEmpty) {
+      setState(() {
+        _todos.add(_controller.text);
+        _controller.clear();
+      });
+    }
+  }
+
+  void _removeTodoAtIndex(int index) {
     setState(() {
-      double montant = double.tryParse(_controller.text) ?? 0;
-      if (_selectedConversion == "EuroToDinar") {
-        _resultat = montant * 3.4; // Exemple de taux de conversion
-      } else {
-        _resultat = montant / 3.4; // Exemple de taux de conversion
-      }
+      _todos.removeAt(index);
     });
   }
 
@@ -41,76 +42,39 @@ class _ConvertisseurHomeState extends State<ConvertisseurHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("TP1 App"),
-        backgroundColor: Colors.purple,
+        title: Text('To-Do List'),
+        backgroundColor: Colors.teal,
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              TextField(
-                controller: _controller,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: "Montant",
-                ),
+      body: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              controller: _controller,
+              decoration: InputDecoration(
+                labelText: 'Enter a task',
+                border: OutlineInputBorder(),
               ),
-              SizedBox(height: 20),
-              RadioListTile(
-                title: Text("Dinar ➡ Euro"),
-                value: "DinarToEuro",
-                groupValue: _selectedConversion,
-                onChanged: (value) {
-                  setState(() {
-                    _selectedConversion = value.toString();
-                  });
-                },
-              ),
-              RadioListTile(
-                title: Text("Euro ➡ Dinar"),
-                value: "EuroToDinar",
-                groupValue: _selectedConversion,
-                onChanged: (value) {
-                  setState(() {
-                    _selectedConversion = value.toString();
-                  });
-                },
-              ),
-              SizedBox(height: 20),
-              Text(
-                "Le résultat est ${_resultat.toStringAsFixed(3)}  dinars !",
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 18,
-                ),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _convertir,
-                child: Text("CONVERTIR"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 206, 148, 216),
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                  textStyle: TextStyle(fontSize: 18),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: _todos.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(_todos[index]),
+                  onLongPress: () => _removeTodoAtIndex(index),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addTodo,
+        child: Icon(Icons.add),
+        backgroundColor: Colors.teal,
       ),
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
