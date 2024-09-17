@@ -20,8 +20,8 @@ class TodoList extends StatefulWidget {
 }
 
 class _TodoListState extends State<TodoList> {
-  final List<String> _todos = [];
-  final TextEditingController _controller = TextEditingController();
+   List<String> todos = [];
+   TextEditingController _controller = TextEditingController();
 
   void _addTodo() {
     if (_controller.text.isNotEmpty) {
@@ -32,9 +32,9 @@ class _TodoListState extends State<TodoList> {
     }
   }
 
-  void _removeTodoAtIndex(int index) {
+  void removeTodoAtIndex(int index) {
     setState(() {
-      _todos.removeAt(index);
+      todos.removeAt(index);
     });
   }
 
@@ -42,13 +42,13 @@ class _TodoListState extends State<TodoList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('To-Do List'),
+        title: Text('To Do List'),
         backgroundColor: Colors.teal,
       ),
       body: Column(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(15.0),
             child: TextField(
               controller: _controller,
               decoration: InputDecoration(
@@ -63,7 +63,7 @@ class _TodoListState extends State<TodoList> {
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(_todos[index]),
-                  onLongPress: () => _removeTodoAtIndex(index),
+                  onLongPress: () => removeTodoAtIndex(index),
                 );
               },
             ),
