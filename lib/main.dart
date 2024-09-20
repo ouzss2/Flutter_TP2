@@ -20,7 +20,7 @@ class TodoList extends StatefulWidget {
 }
 
 class _TodoListState extends State<TodoList> {
-   List<String> todos = [];
+   List<String> _todos = [];
    TextEditingController _controller = TextEditingController();
 
   void _addTodo() {
@@ -34,7 +34,7 @@ class _TodoListState extends State<TodoList> {
 
   void removeTodoAtIndex(int index) {
     setState(() {
-      todos.removeAt(index);
+      _todos.removeAt(index);
     });
   }
 
